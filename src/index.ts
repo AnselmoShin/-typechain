@@ -77,7 +77,7 @@ class Block{
     typeof aBlock.prevhash === "string" && 
     typeof aBlock.timestamp === "number" && 
     typeof aBlock.data === "string";
-    
+
     constructor(index: number, hash: string, prevhash: string, data: string, timestamp: number){
         this.index = index;
         this.hash = hash;
@@ -102,14 +102,36 @@ const createNewBlock = (data: string) => {
     const newTimeStamp : number = getNewTimeStamp();
     const newHash : string = Block.calculateBlockHash(newIndex, prevBlock.hash, newTimeStamp, data);
     const newBlock : Block = new Block(newIndex, newHash, prevBlock.hash, data, newTimeStamp);
+    addBlock(newBlock)
     return newBlock;
 }
 
-const isValid = (
+const getHashforBlock = (aBlock: Block): string => Block.calculateBlockHash(aBlock.index, aBlock.prevhash, aBlock.timestamp, aBlock.data);
+
+const isBlockValid = (
     candidateBlock: Block,
     prevBlcok: Block
 ): boolean => {
-
+    if(!Block.validateStructure(candidateBlock)){
+        return false;
+    } else if(prevBlcok.index +1 !== candidateBlock.index){
+        return false;
+    } else if(prevBlcok.hash !== candidateBlock.prevhash){
+        return false;
+    } else if(getHashforBlock(candidateBlock) !== candidateBlock.hash){
+        return false;
+    } else {
+        return true;
+    }
 }
 
-console.log(createNewBlock("Hello"), createNewBlock("ByeBye"))
+const addBlock = (candidateBlock: Block): void =>{
+    if(isBlockValid(candidateBlock,getLatestBlock())){
+        blockchain.push(candidateBlock);
+    }
+}
+createNewBlock("Hello");
+createNewBlock("World!");
+createNewBlock("ByeBye");
+createNewBlock("World!");
+console.log(blockchain)
