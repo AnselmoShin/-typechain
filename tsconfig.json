@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "module": "commonjs", // use node.js normally or make imports and exports possible
+        "target": "ES2015", //which version of javascript we want to compile to
+        "sourceMap": true,
+        "outDir": "dist"
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
